@@ -9,8 +9,8 @@ export default class Sales extends BaseSchema {
       table.integer('quantity')
       table.integer('priceunit')
       table.integer('totalprice')
-      table.integer("client_id").unsigned().references("client.id")
-      table.integer("product_id").unsigned().references("product.id")
+      table.integer("client_id").unsigned().references('clients.id')
+      table.integer("product_id").unsigned().references('products.id')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

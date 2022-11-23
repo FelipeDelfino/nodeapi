@@ -20,19 +20,27 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+
 Route.group(() => {
+
+  Route.get('register', 'AuthController.registerShow').as('auth.register.show')
+  Route.post('register', 'AuthController.register').as('auth.register')
+  Route.post('login', 'AuthController.login').as('auth.login')
+ 
+  Route.group(() => {
+    
+    Route.get('/', async () => {
+      return { hello: 'world' }
+    })
+    
+    
+    Route.resource('/clients', 'ClientsController').apiOnly()
+    
+    Route.resource('/products','ProductsController').apiOnly()
+    
+    Route.resource('/sales','SalesController').apiOnly()
+    
+    
+  }).prefix('/api')
   
-  Route.get('/', async () => {
-    return { hello: 'world' }
-  })
-
-
-  Route.resource('/clients', 'ClientsController').apiOnly()
-
-  Route.resource('/products','ProductsController').apiOnly()
-
-  Route.resource('/sales','SalesController').apiOnly()
-
-  
-}).prefix('/api')
-
+}).middleware('auth')

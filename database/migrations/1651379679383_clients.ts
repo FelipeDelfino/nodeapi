@@ -5,9 +5,9 @@ export default class Clients extends BaseSchema {
 
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
-      table.string('name')
-      table.integer('cpf')
+      table.increments('id').notNullable();
+      table.string('name').notNullable();
+      table.integer('cpf').notNullable();
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

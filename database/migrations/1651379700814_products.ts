@@ -6,11 +6,11 @@ export default class Products extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('title')
-      table.string('author')
-      table.integer('pagnumber')
-      table.float('price')
-      table.boolean('deleted')
+      table.string('title').notNullable();
+      table.string('author').notNullable();
+      table.integer('pagnumber').notNullable();
+      table.float('price').notNullable();
+      table.boolean('deleted').notNullable();
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

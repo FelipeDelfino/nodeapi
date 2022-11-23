@@ -1,17 +1,21 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Client from 'App/Models/Client'
 
 export default class ClientsController {
 
     public async store({ request }: HttpContextContract) {
 
-        const body = request.body()
-
-        const client = await Client.create(body)
+        const clientSchema = schema.create({
+            name: schema.string([rules.minLength(3), rules.maxLength(50)]),
+            cpf: schema.number()
+        })
+        const clientValidate = await request.validate({ schema: clientSchema });
+        await Client.create(clientValidate)
 
         return {
             Message: "Client successfuly Created!",
-            data: client,
+            data: clientValidate,
         }
 
     }
@@ -37,12 +41,15 @@ export default class ClientsController {
 
     public async update({ params, request }: HttpContextContract) {
 
-        const body = request.body()
-
+        const clientSchema = schema.create({
+            name: schema.string([rules.minLength(3), rules.maxLength(50)]),
+            cpf: schema.number()
+        })
+        const clientValidate = await request.validate({ schema: clientSchema });
         const client = await Client.findOrFail(params.id)
 
-        client.name = body.name
-        client.cpf = body.cpf
+        client.name = clientValidate.name
+        client.cpf = clientValidate.cpf
 
         await client.save()
 

@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Sales from 'App/Models/Sale'
 
 export default class SalesController {
@@ -12,15 +13,32 @@ export default class SalesController {
     }
 
 
-    public async store({params}: HttpContextContract) {
+    public async store({request}: HttpContextContract) {
 
-
-        const sale = await Sales.create(params.id)
+        const saleSchema = schema.create({
+            quantity: schema.number(),
+            priceunit: schema.number(),
+            totalprice: schema.number(),
+            clientId: schema.number(),
+            productId: schema.number(),
+        })
+        const salesValidate = await request.validate({ schema: saleSchema });
+        await Sales.create(salesValidate)
 
         return {
-            Message: "Client successfuly Created!",
-            data: sale,
+            Message: "Sell successfuly!",
+            data: salesValidate,
         }
 
+    }
+
+
+    public async show({ params }: HttpContextContract) {
+
+        const sale = await Sales.findOrFail(params.id)
+
+        return {
+            data: sale,
+        }
     }
 }
